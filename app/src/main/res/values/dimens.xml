@@ -1,0 +1,15 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="headline_text_size">32sp</dimen>
+    <dimen name="layout_margin_horizontal">16dp</dimen>
+    <dimen name="headline_layout_margin_top">140dp</dimen>
+    <dimen name="title_medium_text_size">20sp</dimen>
+    <dimen name="corners_rounded">360dp</dimen>
+    <dimen name="edit_layout_margin_top">8dp</dimen>
+    <dimen name="edit_layout_margin_bottom">24dp</dimen>
+    <dimen name="edittext_margin_vertical">5dp</dimen>
+    <dimen name="edittext_text_size">14sp</dimen>
+    <dimen name="edittext_padding_start">16dp</dimen>
+    <dimen name="edittext_padding_vertical">15dp</dimen>
+    <dimen name="button_layout_margin_bottom">16dp</dimen>
+</resources>

@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">ThousandsOFCourses</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="home">Главная</string>
+    <string name="favorites">Избранное</string>
+    <string name="account">Аккаунт</string>
+    <string name="entrance">Вход</string>
+    <string name="registration">Регистрация</string>
+    <string name="forgot_password">Забыли пароль</string>
+    <string name="no_account">Нет аккаунта?</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="example_mail">example@gmail.com</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="vk">VK</string>
+    <string name="ok">OK</string>
+
 </resources>

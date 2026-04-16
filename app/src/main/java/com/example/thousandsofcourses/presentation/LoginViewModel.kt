@@ -1,0 +1,191 @@
+package com.example.thousandsofcourses.presentation
+
+import android.util.Log
+import android.view.View
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.thousandsofcourses.R
+import com.example.thousandsofcourses.manager.ResourcesManager
+import com.example.thousandsofcourses.presentation.model.ButtonItem
+import com.example.thousandsofcourses.presentation.model.EditTextItem
+import com.example.thousandsofcourses.presentation.model.Ids
+import com.example.thousandsofcourses.presentation.model.ImageButtonsItem
+import com.example.thousandsofcourses.presentation.model.LineItem
+import com.example.thousandsofcourses.presentation.model.OnEmailChanged
+import com.example.thousandsofcourses.presentation.model.OnPasswordChanged
+import com.example.thousandsofcourses.presentation.model.OnStateChanged
+import com.example.thousandsofcourses.presentation.model.PasswordEditTextItem
+import com.example.thousandsofcourses.presentation.model.TextButtonsItem
+import com.example.thousandsofcourses.presentation.model.TitleItem
+import com.example.thousandsofcourses.presentation.model.TitleMediumItem
+import com.example.thousandsofcourses.presentation.model.UIState
+import com.example.thousandsofcourses.presentation.model.ViewItem
+import com.example.thousandsofcourses.utils.Validator
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlin.collections.mutableListOf
+
+@OptIn(FlowPreview::class)
+class LoginViewModel(
+    val resourcesManager: ResourcesManager
+) : ViewModel() {
+
+    private val _state = MutableStateFlow(UIState())
+    val state: StateFlow<UIState> = _state
+    private val _events = MutableSharedFlow<OnStateChanged>(replay = 1)
+    init {
+        _events
+            .filterIsInstance<OnEmailChanged>()
+            .map { it.text }
+            .also {
+                Log.d("AAAAAA", "${it}")
+            }
+            .debounce(300)
+            .filter { it.length >= 3 }
+            .onEach { email ->
+                validateAndUpdateEmailState(email)
+            }
+            .launchIn(viewModelScope)
+
+        _events
+            .filterIsInstance<OnPasswordChanged>()
+            .map { it.text }
+            .debounce(300)
+            .filter { it.length >= 3 }
+            .onEach { password ->
+                validateAndUpdatePasswordState(password)
+            }
+            .launchIn(viewModelScope)
+
+
+        loadState()
+    }
+
+    private fun loadState() {
+        viewModelScope.launch {
+            val viewItem = mutableListOf<ViewItem>()
+            val title = TitleItem(
+                id = Ids.Title.idName,
+                text = resourcesManager.getString(R.string.entrance)
+            )
+            viewItem.add(title)
+            val emailTitle = TitleMediumItem(
+                id = Ids.TitleMedium.idName,
+                text = resourcesManager.getString(R.string.email)
+            )
+            viewItem.add(emailTitle)
+            val emailEditText = EditTextItem(
+                id = Ids.EditText.idName,
+                text = "",
+                isCorrect = false
+            )
+            viewItem.add(emailEditText)
+            val passwordTitle = TitleMediumItem(
+                id = Ids.TitleMedium.idName + 1,
+                text = resourcesManager.getString(R.string.password)
+            )
+            viewItem.add(passwordTitle)
+            val passwordEditText = PasswordEditTextItem(
+                id = Ids.PasswordEditText.idName,
+                text = "",
+                isCorrect = false
+            )
+            viewItem.add(passwordEditText)
+            val button = ButtonItem(
+                id = Ids.Button.idName,
+            )
+            viewItem.add(button)
+            val textBtns = TextButtonsItem(
+                id = Ids.TextButtons.idName
+            )
+            viewItem.add(textBtns)
+
+            val line = LineItem(
+                id = Ids.Line.idName
+            )
+            viewItem.add(line)
+            val imageButtons = ImageButtonsItem(
+                id = Ids.ImageButton.idName
+            )
+            viewItem.add(imageButtons)
+
+            _state.update {
+                it.copy(viewItems = viewItem)
+            }
+        }
+    }
+
+    @OptIn(FlowPreview::class)
+    fun onEvent(onStateChanged: OnStateChanged) {
+        Log.d("AAAAAA", "onEvent received: $onStateChanged")
+        _events.tryEmit(onStateChanged)
+//       when(onStateChanged) {
+//           is OnEmailChanged -> validateAndUpdateEmailState(onStateChanged.text)
+//           is OnPasswordChanged -> validateAndUpdatePasswordState(onStateChanged.text)
+//       }
+    }
+
+    private fun getIndices(viewItems: List<ViewItem>): Triple<Int, Int, Int> {
+        return Triple(
+            viewItems.indexOfFirst { it.id == Ids.EditText.idName },
+            viewItems.indexOfFirst { it.id == Ids.PasswordEditText.idName },
+            viewItems.indexOfFirst { it.id == Ids.Button.idName }
+        )
+    }
+
+    private fun validateAndUpdateEmailState(email: String) {
+        Log.d("AAAAAA", "validateAndUpdateEmailState: ${email}")
+        _state.update { currentState ->
+            val viewItems = currentState.viewItems.toMutableList()
+            val (emailIndex, passwordIndex, buttonIndex) = getIndices(viewItems)
+
+            val isEmailValid = Validator.validateEmail(email) == null && email.isNotEmpty()
+            val passwordItem = viewItems.getOrNull(passwordIndex) as? PasswordEditTextItem
+            val isPasswordValid = passwordItem?.isCorrect == true
+
+
+            (viewItems[emailIndex] as? EditTextItem)?.let {
+                viewItems[emailIndex] = it.copy(text = email, isCorrect = isEmailValid)
+            }
+
+            (viewItems[buttonIndex] as? ButtonItem)?.let {
+                viewItems[buttonIndex] = it.copy(isEnable = isEmailValid && isPasswordValid)
+            }
+
+            currentState.copy(viewItems = viewItems)
+        }
+    }
+
+    private fun validateAndUpdatePasswordState(password: String) {
+        Log.d("AAAAAA", "validateAndUpdateEmailState: ${password}")
+        _state.update { currentState ->
+            val viewItems = currentState.viewItems.toMutableList()
+            val (emailIndex, passwordIndex, buttonIndex) = getIndices(viewItems)
+
+            val isPasswordValid = Validator.validatePassword(password) == null && password.isNotEmpty()
+            val emailItem = viewItems.getOrNull(emailIndex) as? EditTextItem
+            val isEmailValid = emailItem?.isCorrect == true
+
+            (viewItems[passwordIndex] as? PasswordEditTextItem)?.let {
+                viewItems[passwordIndex] = it.copy(text = password, isCorrect = isPasswordValid)
+            }
+
+            (viewItems[buttonIndex] as? ButtonItem)?.let {
+                viewItems[buttonIndex] = it.copy(isEnable = isEmailValid && isPasswordValid)
+            }
+
+            currentState.copy(viewItems = viewItems)
+        }
+    }
+}
