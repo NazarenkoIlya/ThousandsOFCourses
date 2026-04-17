@@ -1,5 +1,6 @@
 package com.example.thousandsofcourses.presentation.login.holders
 
+import android.content.Intent
 import com.example.thousandsofcourses.presentation.login.model.ViewItem
 
 interface MainViewHolder {

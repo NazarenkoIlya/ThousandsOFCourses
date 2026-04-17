@@ -100,7 +100,7 @@ class LoginAdapter(
                     parent,
                     false
                 )
-                ButtonItemHolder(binding)
+                ButtonItemHolder(binding,onStateChange)
             }
 
             TYPE_TEXT_BUTTONS -> {

@@ -10,6 +10,7 @@ import com.example.thousandsofcourses.presentation.login.model.EditTextItem
 import com.example.thousandsofcourses.presentation.login.model.Ids
 import com.example.thousandsofcourses.presentation.login.model.ImageButtonsItem
 import com.example.thousandsofcourses.presentation.login.model.LineItem
+import com.example.thousandsofcourses.presentation.login.model.OnButtonClick
 import com.example.thousandsofcourses.presentation.login.model.OnEmailChanged
 import com.example.thousandsofcourses.presentation.login.model.OnPasswordChanged
 import com.example.thousandsofcourses.presentation.login.model.OnStateChanged
@@ -17,10 +18,12 @@ import com.example.thousandsofcourses.presentation.login.model.PasswordEditTextI
 import com.example.thousandsofcourses.presentation.login.model.TextButtonsItem
 import com.example.thousandsofcourses.presentation.login.model.TitleItem
 import com.example.thousandsofcourses.presentation.login.model.TitleMediumItem
+import com.example.thousandsofcourses.presentation.login.model.UIButtonState
 import com.example.thousandsofcourses.presentation.login.model.UIState
 import com.example.thousandsofcourses.presentation.login.model.ViewItem
 import com.example.thousandsofcourses.utils.Validator
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,6 +45,7 @@ class LoginViewModel(
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state
     private val _events = MutableSharedFlow<OnStateChanged>(replay = 1)
+
     init {
         _events
             .filterIsInstance<OnEmailChanged>()
@@ -126,12 +130,32 @@ class LoginViewModel(
 
     @OptIn(FlowPreview::class)
     fun onEvent(onStateChanged: OnStateChanged) {
-        Log.d("AAAAAA", "onEvent received: $onStateChanged")
-        _events.tryEmit(onStateChanged)
-//       when(onStateChanged) {
-//           is OnEmailChanged -> validateAndUpdateEmailState(onStateChanged.text)
-//           is OnPasswordChanged -> validateAndUpdatePasswordState(onStateChanged.text)
-//       }
+        when (onStateChanged) {
+            is OnEmailChanged, is OnPasswordChanged -> _events.tryEmit(onStateChanged)
+            OnButtonClick -> {
+                SignIn()
+            }
+        }
+
+    }
+    private fun SignIn(){
+        viewModelScope.launch {
+            _state.update {
+                it.copy(it.viewItems.map {
+                    if (it is ButtonItem) {
+                        it.copy(state = UIButtonState.Loading)
+                    } else it
+                })
+            }
+            delay(1000)
+            _state.update {
+                it.copy(it.viewItems.map {
+                    if (it is ButtonItem) {
+                        it.copy(state = UIButtonState.Success)
+                    } else it
+                })
+            }
+        }
     }
 
     private fun getIndices(viewItems: List<ViewItem>): Triple<Int, Int, Int> {
@@ -143,7 +167,6 @@ class LoginViewModel(
     }
 
     private fun validateAndUpdateEmailState(email: String) {
-        Log.d("AAAAAA", "validateAndUpdateEmailState: ${email}")
         _state.update { currentState ->
             val viewItems = currentState.viewItems.toMutableList()
             val (emailIndex, passwordIndex, buttonIndex) = getIndices(viewItems)
@@ -166,12 +189,12 @@ class LoginViewModel(
     }
 
     private fun validateAndUpdatePasswordState(password: String) {
-        Log.d("AAAAAA", "validateAndUpdateEmailState: ${password}")
         _state.update { currentState ->
             val viewItems = currentState.viewItems.toMutableList()
             val (emailIndex, passwordIndex, buttonIndex) = getIndices(viewItems)
 
-            val isPasswordValid = Validator.validatePassword(password) == null && password.isNotEmpty()
+            val isPasswordValid =
+                Validator.validatePassword(password) == null && password.isNotEmpty()
             val emailItem = viewItems.getOrNull(emailIndex) as? EditTextItem
             val isEmailValid = emailItem?.isCorrect == true
 
