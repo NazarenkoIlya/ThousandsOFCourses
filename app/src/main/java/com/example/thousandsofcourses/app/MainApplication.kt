@@ -1,6 +1,7 @@
 package com.example.thousandsofcourses.app
 
 import android.app.Application
+import com.example.thousandsofcourses.di.dataBaseModule
 import com.example.thousandsofcourses.di.dataModule
 import com.example.thousandsofcourses.di.domainModule
 import com.example.thousandsofcourses.di.managerModule
@@ -24,7 +25,8 @@ class MainApplication : Application()  {
                     viewModelModule,
                     dataModule,
                     domainModule,
-                    retrofitModule
+                    retrofitModule,
+                    dataBaseModule
                 )
             )
         }

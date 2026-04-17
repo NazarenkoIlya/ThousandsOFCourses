@@ -19,4 +19,8 @@
         <item name="android:layout_marginTop">@dimen/edittext_margin_vertical</item>
         <item name="android:layout_marginBottom">@dimen/edittext_margin_vertical</item>
     </style>
+
+    <style name="GrayActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/light_gray</item>
+    </style>
 </resources>

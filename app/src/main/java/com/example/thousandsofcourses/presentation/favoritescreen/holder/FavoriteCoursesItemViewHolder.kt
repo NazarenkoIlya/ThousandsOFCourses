@@ -1,23 +1,19 @@
-package com.example.thousandsofcourses.presentation.mainscreen.holders
+package com.example.thousandsofcourses.presentation.favoritescreen.holder
 
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thousandsofcourses.R
 import com.example.thousandsofcourses.databinding.CourseItemLayoutBinding
-import com.example.thousandsofcourses.manager.ResourcesManager
-import com.example.thousandsofcourses.presentation.login.model.EditTextItem
-import com.example.thousandsofcourses.presentation.mainscreen.CoursesAdapter
-import com.example.thousandsofcourses.presentation.mainscreen.model.CoursesItem
-import com.example.thousandsofcourses.presentation.mainscreen.model.OnLikeClicked
-import com.example.thousandsofcourses.presentation.mainscreen.model.OnStateChanged
-import com.example.thousandsofcourses.presentation.mainscreen.model.ViewItem
+import com.example.thousandsofcourses.presentation.favoritescreen.FavoriteCoursesAdapter
+import com.example.thousandsofcourses.presentation.favoritescreen.model.FavoriteCoursesItem
+import com.example.thousandsofcourses.presentation.favoritescreen.model.OnLikeClicked
+import com.example.thousandsofcourses.presentation.favoritescreen.model.OnStateChanged
+import com.example.thousandsofcourses.presentation.favoritescreen.model.ViewItem
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-
-class CoursesItemViewHolder(
+class FavoriteCoursesItemViewHolder (
     private val binding: CourseItemLayoutBinding,
     private val onStateChange: (OnStateChanged) -> Unit
 ) : RecyclerView.ViewHolder(binding.root), MainViewHolder {
@@ -28,13 +24,13 @@ class CoursesItemViewHolder(
     )
 
     override fun bind(item: ViewItem) {
-        item as CoursesItem
+        item as FavoriteCoursesItem
         with(binding) {
 
             imageView.setImageResource(imageList[(0..imageList.lastIndex).random()])
             titleTextView.text = item.title
             descriptionTextView.text = item.text
-            priceTextView.text = item.priceСurrency
+            priceTextView.text = item.price
             dateTextView.text = formatDate(item.publishDate)
             favoriteImageView.setImageResource(
                 if (item.hasLike) R.drawable.ic_fill_favorites
@@ -51,10 +47,10 @@ class CoursesItemViewHolder(
 
         (payload.firstOrNull() as? Bundle)?.let {
             val isContentChanged =
-                it.getInt(CoursesAdapter.LIKE_IMAGE) == CoursesAdapter.LIKE_IMAGE_MEANING
+                it.getInt(FavoriteCoursesAdapter.LIKE_IMAGE) == FavoriteCoursesAdapter.LIKE_IMAGE_MEANING
 
             if (isContentChanged) {
-                item as CoursesItem
+                item as FavoriteCoursesItem
                 binding.favoriteImageView.setImageResource(
                     if (item.hasLike) R.drawable.ic_fill_favorites
                     else R.drawable.ic_favorites_small

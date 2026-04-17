@@ -1,5 +1,6 @@
 package com.example.thousandsofcourses.di
 
+import com.example.thousandsofcourses.presentation.favoritescreen.FavoriteCoursesViewModel
 import com.example.thousandsofcourses.presentation.login.LoginViewModel
 import com.example.thousandsofcourses.presentation.mainscreen.CoursesViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -14,7 +15,18 @@ val viewModelModule = module {
     viewModel {
         CoursesViewModel(
             getCoursesUseCase = get(),
-            resourcesManager = get()
+            resourcesManager = get(),
+            deleteFavoriteCoursesUseCase = get(),
+            insertFavoriteCoursesUseCase = get()
+        )
+    }
+
+    viewModel {
+        FavoriteCoursesViewModel(
+            getCoursesUseCase = get(),
+            resourcesManager = get(),
+            deleteFavoriteCoursesUseCase = get(),
+            //insertFavoriteCoursesUseCase = get()
         )
     }
 }

@@ -1,4 +1,4 @@
-package com.example.thousandsofcourses.presentation.mainscreen
+package com.example.thousandsofcourses.presentation.favoritescreen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,27 +9,24 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.thousandsofcourses.R
-import com.example.thousandsofcourses.databinding.FragmentCoursesBinding
-import com.example.thousandsofcourses.databinding.FragmentLoginBinding
-import com.example.thousandsofcourses.presentation.login.LoginAdapter
-import com.example.thousandsofcourses.presentation.login.LoginViewModel
-import com.example.thousandsofcourses.presentation.mainscreen.model.UIState
+import com.example.thousandsofcourses.databinding.FragmentFavoriteCoursesBinding
+import com.example.thousandsofcourses.presentation.favoritescreen.model.UIState
 import com.example.thousandsofcourses.utils.autoCleared
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.getValue
 
-class CoursesFragment : Fragment() {
-    private var binding: FragmentCoursesBinding by autoCleared()
-    private val viewModel by viewModel<CoursesViewModel>()
+class FavoriteCoursesFragment : Fragment() {
+
+
+    private var binding: FragmentFavoriteCoursesBinding by autoCleared()
+    private val viewModel by viewModel<FavoriteCoursesViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCoursesBinding.inflate(inflater, container, false)
+        binding = FragmentFavoriteCoursesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,11 +36,9 @@ class CoursesFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
 
-        val adapter = CoursesAdapter {
+        val adapter = FavoriteCoursesAdapter {
             viewModel.onEvent(it)
         }
-
-
 
         binding.recyclerView.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
@@ -79,10 +74,7 @@ class CoursesFragment : Fragment() {
                 }
             }
         }
-        binding.sortingByDateAddedTextButton.setOnClickListener {
-            viewModel.sortingCourse()
 
-        }
     }
 
     override fun onResume() {

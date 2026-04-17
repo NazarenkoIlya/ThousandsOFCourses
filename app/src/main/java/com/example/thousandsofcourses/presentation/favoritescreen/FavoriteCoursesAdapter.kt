@@ -1,7 +1,6 @@
-package com.example.thousandsofcourses.presentation.mainscreen
+package com.example.thousandsofcourses.presentation.favoritescreen
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,19 +8,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thousandsofcourses.R
 import com.example.thousandsofcourses.databinding.CourseItemLayoutBinding
-import com.example.thousandsofcourses.presentation.mainscreen.holders.CoursesItemViewHolder
-import com.example.thousandsofcourses.presentation.mainscreen.holders.MainViewHolder
-import com.example.thousandsofcourses.presentation.mainscreen.model.CoursesItem
-import com.example.thousandsofcourses.presentation.mainscreen.model.OnStateChanged
-import com.example.thousandsofcourses.presentation.mainscreen.model.ViewItem
+import com.example.thousandsofcourses.presentation.favoritescreen.holder.FavoriteCoursesItemViewHolder
+import com.example.thousandsofcourses.presentation.favoritescreen.holder.MainViewHolder
+import com.example.thousandsofcourses.presentation.favoritescreen.model.FavoriteCoursesItem
+import com.example.thousandsofcourses.presentation.favoritescreen.model.OnStateChanged
+import com.example.thousandsofcourses.presentation.favoritescreen.model.ViewItem
 
-class CoursesAdapter(
+class FavoriteCoursesAdapter (
     private val onStateChange: (OnStateChanged) -> Unit
 ): ListAdapter<ViewItem, RecyclerView.ViewHolder>(DiffCallback())  {
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is CoursesItem -> R.layout.course_item_layout
+            is FavoriteCoursesItem -> R.layout.course_item_layout
         }
     }
 
@@ -36,7 +35,7 @@ class CoursesAdapter(
                     parent,
                     false
                 )
-                return CoursesItemViewHolder(
+                return FavoriteCoursesItemViewHolder(
                     binding,
                     onStateChange
                 )
@@ -85,15 +84,14 @@ class DiffCallback : DiffUtil.ItemCallback<ViewItem>() {
     override fun getChangePayload(oldItem: ViewItem, newItem: ViewItem): Any? {
         val diffBundle = Bundle()
         return when{
-            oldItem is CoursesItem && newItem is CoursesItem &&
+            oldItem is FavoriteCoursesItem && newItem is FavoriteCoursesItem &&
                     (oldItem.hasLike != newItem.hasLike) &&
                     oldItem.id == newItem.id -> {
                 diffBundle.apply {
-                    putInt(CoursesAdapter.LIKE_IMAGE, CoursesAdapter.LIKE_IMAGE_MEANING)
+                    putInt(FavoriteCoursesAdapter.LIKE_IMAGE, FavoriteCoursesAdapter.LIKE_IMAGE_MEANING)
                 }
             }
             else -> super.getChangePayload(oldItem, newItem)
         }
     }
 }
-

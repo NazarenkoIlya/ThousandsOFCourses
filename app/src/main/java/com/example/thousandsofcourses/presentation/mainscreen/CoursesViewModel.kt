@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.thousandsofcourses.R
 import com.example.thousandsofcourses.domain.model.Course
+import com.example.thousandsofcourses.domain.usecase.DeleteFavoriteCoursesUseCase
 import com.example.thousandsofcourses.domain.usecase.GetCoursesUseCase
+import com.example.thousandsofcourses.domain.usecase.InsertFavoriteCoursesUseCase
 import com.example.thousandsofcourses.manager.ResourcesManager
 import com.example.thousandsofcourses.presentation.mainscreen.model.CoursesItem
 import com.example.thousandsofcourses.presentation.mainscreen.model.CoursesUIState
@@ -18,7 +20,9 @@ import kotlinx.coroutines.launch
 
 class CoursesViewModel(
     private val getCoursesUseCase: GetCoursesUseCase,
-    private val resourcesManager: ResourcesManager
+    private val resourcesManager: ResourcesManager,
+    private val deleteFavoriteCoursesUseCase: DeleteFavoriteCoursesUseCase,
+    private val insertFavoriteCoursesUseCase: InsertFavoriteCoursesUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CoursesUIState())
@@ -27,17 +31,17 @@ class CoursesViewModel(
     private var originalCourses: List<CoursesItem> = emptyList()
     private var isSorting = false
 
-    init {
-        loadData()
-    }
+//    init {
+//        loadData()
+//    }
 
-    private fun loadData() {
+    fun loadData() {
         viewModelScope.launch {
             _state.value = CoursesUIState(uiState = UIState.Loading)
 
             val courses = getCoursesUseCase.invoke().fold(
                 onSuccess = {
-                    originalCourses = it.courses.map { it.toMap() }
+                    originalCourses = it.courses.map { it.toMapCoursesItem() }
                     CoursesUIState(
                         courses = originalCourses,
                         uiState = UIState.Success
@@ -72,25 +76,45 @@ class CoursesViewModel(
     fun onEvent(onStateChanged: OnStateChanged) {
         when (onStateChanged) {
             is OnLikeClicked -> {
-                val id = onStateChanged.courseId
-                _state.update {
-                    it.copy(
-                        courses = it.courses.map {
-                            if (it.id == id) it.copy(hasLike = !it.hasLike)
-                            else it
-                        }
-                    )
+                viewModelScope.launch {
+                    val id = onStateChanged.courseId
+                    _state.update {
+                        it.copy(
+                            courses = it.courses.map {
+                                if (it.id == id) {
+                                    it.copy(hasLike = !it.hasLike)
+                                } else it
+                            }
+                        )
+                    }
+                    _state.value.courses.forEach {
+                        if (it.hasLike) insertFavoriteCoursesUseCase.invoke(it.toMapCourse())
+                        else deleteFavoriteCoursesUseCase.invoke(it.id)
+                    }
                 }
             }
         }
     }
 
-    private fun Course.toMap(): CoursesItem {
+    private fun Course.toMapCoursesItem(): CoursesItem {
         return CoursesItem(
             id = id,
             title = title,
             text = text,
-            price = resourcesManager.getString(R.string.price, price),
+            priceСurrency = resourcesManager.getString(R.string.price, price),
+            price = price,
+            startDate = startDate,
+            publishDate = publishDate,
+            hasLike = hasLike
+        )
+    }
+
+    private fun CoursesItem.toMapCourse(): Course {
+        return Course(
+            id = id,
+            title = title,
+            text = text,
+            price = price,
             startDate = startDate,
             publishDate = publishDate,
             hasLike = hasLike

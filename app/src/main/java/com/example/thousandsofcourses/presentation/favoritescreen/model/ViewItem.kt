@@ -1,22 +1,20 @@
-package com.example.thousandsofcourses.presentation.mainscreen.model
-
+package com.example.thousandsofcourses.presentation.favoritescreen.model
 
 sealed interface ViewItem {
     val id: String
 }
 
-data class CoursesItem(
+data class FavoriteCoursesItem(
     override val id: String,
     val title: String,
     val text: String,
     val price: String,
-    val priceСurrency: String,
     val startDate: String,
     val publishDate: String,
     val hasLike: Boolean = false,
 ): ViewItem
 
-data class CoursesUIState(
+data class FavoriteCoursesUIState(
     val uiState: UIState = UIState.Loading,
-    val courses: List<CoursesItem> = emptyList()
+    val courses: List<FavoriteCoursesItem> = emptyList()
 )
