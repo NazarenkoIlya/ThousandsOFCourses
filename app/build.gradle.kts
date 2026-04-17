@@ -84,4 +84,7 @@ dependencies {
     //lifecycle
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    implementation(libs.okhttp3)
+    implementation(libs.logging.interceptor)
 }

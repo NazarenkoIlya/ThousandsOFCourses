@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".app.MainApplication"
         android:allowBackup="true"
@@ -14,19 +18,22 @@
         android:theme="@style/Theme.ThousandsOFCourses"
         tools:targetApi="31">
         <activity
-            android:name=".app.AuthActivity"
-            android:exported="true"
-            android:theme="@style/Theme.ThousandsOFCourses" >
+            android:name=".app.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".app.MainActivity"
-            android:exported="false">
+            android:name=".app.AuthActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ThousandsOFCourses" >
+
         </activity>
+
     </application>
 
 </manifest>

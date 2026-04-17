@@ -19,5 +19,10 @@
     <string name="password">Пароль</string>
     <string name="vk">VK</string>
     <string name="ok">OK</string>
+    <string name="price">"%1$s ₽"</string>
+    <string name="courses">Курсы</string>
+    <string name="more_details">Подробнее</string>
+    <string name="search">Search courses…</string>
+    <string name="by_date_added">По дате добавления</string>
 
 </resources>

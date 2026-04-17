@@ -1,7 +1,10 @@
 package com.example.thousandsofcourses.app
 
 import android.app.Application
+import com.example.thousandsofcourses.di.dataModule
+import com.example.thousandsofcourses.di.domainModule
 import com.example.thousandsofcourses.di.managerModule
+import com.example.thousandsofcourses.di.retrofitModule
 import com.example.thousandsofcourses.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,7 +21,10 @@ class MainApplication : Application()  {
             modules(
                 listOf(
                     managerModule,
-                    viewModelModule
+                    viewModelModule,
+                    dataModule,
+                    domainModule,
+                    retrofitModule
                 )
             )
         }

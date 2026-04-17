@@ -9,13 +9,13 @@
 
     <style name="Theme.EditText" parent="android:Widget.EditText">
         <item name="android:background">@drawable/light_gray_background</item>
-        <item name="android:textColorHint">@color/white_hint</item>
+        <item name="android:textColorHint">@color/light_gray1</item>
         <item name="android:paddingStart">@dimen/edittext_padding_start</item>
         <item name="android:paddingTop">@dimen/edittext_padding_vertical</item>
         <item name="android:paddingBottom">@dimen/edittext_padding_vertical</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">@dimen/edittext_text_size</item>
-        <item name="android:textColor">@color/white_hint</item>
+        <item name="android:textColor">@color/light_gray1</item>
         <item name="android:layout_marginTop">@dimen/edittext_margin_vertical</item>
         <item name="android:layout_marginBottom">@dimen/edittext_margin_vertical</item>
     </style>

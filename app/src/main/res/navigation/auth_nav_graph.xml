@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:label="Login"
-        android:name= "com.example.thousandsofcourses.presentation.LoginFragment"
+        android:name= "com.example.thousandsofcourses.presentation.login.LoginFragment"
         tools:layout="@layout/fragment_login">
 
     </fragment>

@@ -12,4 +12,6 @@
     <dimen name="edittext_padding_start">16dp</dimen>
     <dimen name="edittext_padding_vertical">15dp</dimen>
     <dimen name="button_layout_margin_bottom">16dp</dimen>
+    <dimen name="corners_course_item_rounded">16dp</dimen>
+    <dimen name="corners_filter_rounded">36dp</dimen>
 </resources>
