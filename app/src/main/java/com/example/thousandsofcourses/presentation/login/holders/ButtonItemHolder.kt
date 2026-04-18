@@ -32,7 +32,9 @@ class ButtonItemHolder(
 
             UIButtonState.Success -> {
                 binding.progressBar.visibility = View.GONE
-                val intent = Intent(binding.root.context, MainActivity::class.java)
+                val intent = Intent(binding.root.context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
                 binding.root.context.startActivity(intent)
             }
         }

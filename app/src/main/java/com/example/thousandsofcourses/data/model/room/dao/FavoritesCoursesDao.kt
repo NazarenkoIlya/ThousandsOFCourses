@@ -19,4 +19,6 @@ interface FavoritesCoursesDao  {
     @Query("DELETE FROM favorite_courses WHERE id = :id")
     suspend fun deleteCourseById(id: String)
 
+    @Query("SELECT EXISTS(SELECT 1 FROM favorite_courses WHERE id = :id)")
+    suspend fun isCourseExists(id: String): Boolean
 }
