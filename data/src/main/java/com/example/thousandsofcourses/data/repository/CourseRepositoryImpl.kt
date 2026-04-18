@@ -1,6 +1,5 @@
 package com.example.thousandsofcourses.data.repository
 
-import com.example.thousandsofcourses.data.mapper.toCourse
 import com.example.thousandsofcourses.data.mapper.toCourseList
 import com.example.thousandsofcourses.data.mapper.toFavoritesCoursesDbo
 import com.example.thousandsofcourses.data.model.room.dao.FavoritesCoursesDao

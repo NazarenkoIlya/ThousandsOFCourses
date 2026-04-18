@@ -5,9 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.thousandsofcourses.R
 import com.example.thousandsofcourses.domain.model.Course
 import com.example.thousandsofcourses.domain.usecase.DeleteFavoriteCoursesUseCase
-import com.example.thousandsofcourses.domain.usecase.GetCoursesUseCase
 import com.example.thousandsofcourses.domain.usecase.GetFavoriteCoursesUseCase
-import com.example.thousandsofcourses.domain.usecase.InsertFavoriteCoursesUseCase
 import com.example.thousandsofcourses.manager.ResourcesManager
 import com.example.thousandsofcourses.presentation.favoritescreen.model.FavoriteCoursesItem
 import com.example.thousandsofcourses.presentation.favoritescreen.model.FavoriteCoursesUIState

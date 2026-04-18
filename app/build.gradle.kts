@@ -87,4 +87,7 @@ dependencies {
 
     implementation(libs.okhttp3)
     implementation(libs.logging.interceptor)
+
+    implementation(project(":domain"))
+    implementation(project(":data"))
 }

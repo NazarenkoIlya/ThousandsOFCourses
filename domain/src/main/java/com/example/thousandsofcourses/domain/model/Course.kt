@@ -1,7 +1,5 @@
 package com.example.thousandsofcourses.domain.model
 
-import com.google.gson.annotations.SerializedName
-
 
 data class CourseList(
     val courses: List<Course> = emptyList()

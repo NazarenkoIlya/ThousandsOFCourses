@@ -1,7 +1,5 @@
 package com.example.thousandsofcourses.domain.usecase
 
-import com.example.thousandsofcourses.domain.model.CourseList
-import com.example.thousandsofcourses.domain.repository.CourseRepository
 import com.example.thousandsofcourses.domain.repository.FavoriteCoursesRepository
 
 class DeleteFavoriteCoursesUseCase (
